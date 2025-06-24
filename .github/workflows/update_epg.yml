@@ -2,7 +2,7 @@ name: Update EPG File
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Обновление каждый час
+    - cron: '0 * * * *'  # Обновление каждый час (каждую минуту можно заменить '*/1')
   push:
     branches:
       - main
@@ -30,8 +30,21 @@ jobs:
 import requests
 url = 'https://epg.one/epg2.xml'
 response = requests.get(url)
-response.raise_for_status()  # Чтобы увидеть ошибку, если что-то не так
+response.raise_for_status()  # Проверим успешность запроса
 with open('epg2.xml', 'wb') as f:
     f.write(response.content)
-print('EPG file downloaded successfully')
+print('EPG файл успешно скачан')
 "
+
+    - name: Set up GitHub credentials
+      run: |
+        git config --global user.email "your-email@example.com"
+        git config --global user.name "GitHub Actions"
+
+    - name: Commit and Push changes
+      run: |
+        git add epg2.xml
+        git commit -m "Обновление EPG файла"
+        git push https://github.com/${{ github.repository }}.git HEAD:main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
