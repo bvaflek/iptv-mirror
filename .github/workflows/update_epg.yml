@@ -15,25 +15,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install dependencies
-      run: |
-        pip install requests gitpython
-
     - name: Download EPG file
       run: |
-        python -c |
-          import requests
-          url = "https://epg.one/epg2.xml"
-          response = requests.get(url)
-          response.raise_for_status()  # Проверим успешность запроса
-          with open("epg2.xml", "wb") as f:
-              f.write(response.content)
-          print("EPG файл успешно скачан")
+        wget https://epg.one/epg2.xml -O epg2.xml
 
     - name: Set up GitHub credentials
       run: |
