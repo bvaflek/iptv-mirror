@@ -24,10 +24,11 @@ jobs:
       run: |
         wget https://epg.one/epg2.xml -O epg2.xml
 
-    - name: Commit and Push changes
+    - name: Commit and Push changes using Personal Access Token
       run: |
+        git remote set-url origin https://<your-username>:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
         git add epg2.xml
         git commit -m "Обновление EPG файла" || echo "No changes to commit"
-        git push https://github.com/${{ github.repository }}.git HEAD:main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        git push
+  env:
+    GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
