@@ -2,7 +2,7 @@ name: Update EPG File
 
 on:
   schedule:
-    - cron: '0 * * * *'  # обновление каждый час
+    - cron: '0 * * * *'  # Обновление каждый час
   push:
     branches:
       - main
@@ -26,4 +26,12 @@ jobs:
 
     - name: Download EPG file
       run: |
-        python download_epg.py
+        python -c "
+import requests
+url = 'https://epg.one/epg2.xml'
+response = requests.get(url)
+response.raise_for_status()  # Чтобы увидеть ошибку, если что-то не так
+with open('epg2.xml', 'wb') as f:
+    f.write(response.content)
+print('EPG file downloaded successfully')
+"
