@@ -3,28 +3,21 @@ name: Update EPG
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *' # кожні 6 годин
+    - cron: '0 */6 * * *'  # кожні 6 годин
 
 jobs:
   update-epg:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Git user
+      - name: Set up Git identity
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      - name: Set remote with PAT
+      - name: Set authenticated remote with token
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/bvaflek/iptv-mirror.git
-
-      - name: Update EPG file
-        run: |
-          git add epg2.xml
-          git diff --cached --quiet || git commit -m "Обновление EPG файла"
-          git push
+          git remote
